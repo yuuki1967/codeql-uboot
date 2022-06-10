@@ -7,7 +7,7 @@ class NetworkByteSwap extends Expr {
     // TODO: replace <class> and <var>
     exists(MacroInvocation mi |
       // TODO: <condition>
-      mi.getMacroName().regexpMatch("ntoh[ls]?+") |
+      mi.getMacroName().regexpMatch("(ntoh|ntohll|ntohs)") |
       this = mi.getExpr()
     )
   }
@@ -20,7 +20,7 @@ class Config extends TaintTracking::Configuration{
     }
     override predicate isSink(DataFlow::Node sink){
         exists(FunctionCall fcn |
-            sink.asExpr() = fcn.getArgument(0) and
+            sink.asExpr() = fcn.getArgument(2) and
             fcn.getTarget().hasName("memcpy")
         )
     }
